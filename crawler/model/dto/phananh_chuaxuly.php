@@ -33,9 +33,6 @@ class phananh_chuaxuly
     $this->thoi_han = $html->find(".ChiTiet_Vien .ChiTiet_NgayGui")[1]->innertext;
     $this->donvi_xuly = $html->find(".ChiTiet_Vien .ChiTiet_XuLy_Vien .ChiTiet_DonVi")[0]->innertext;
     $this->is_new = $this->check_phananh_is_new();
-    // Write te code below to save the oldest index of phananh_chuaxuly...
-
-
   }
 
   /** Set and return value of "$this->url", which is the url link to the web page of "phananh_chuaxuly" */
@@ -44,12 +41,4 @@ class phananh_chuaxuly
     $url_object = new url_object();
     $this->url = $url_object->url . "?pa=" . $this->id;
   }
-
-  /** 
-   * check if the the particular-id "phananh" was loaded and saved to database before 
-   * If it 's existing in database, meaning that the "phananh_chuaxuly" is old (this function return false)
-   * Else, return true
-   */
-  private function check_phananh_is_new()
-  { }
 }

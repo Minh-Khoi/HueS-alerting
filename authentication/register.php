@@ -36,9 +36,13 @@ if (isset($_POST['register'])) {
     // Save into DB
     if (count($errors) == 0) {
         $hashed_password = md5($password);
-        $query = "INSERT INTO users (user_name, email, hashed_password, password) 
-                                VALUES ('$username', '$email', '$hashed_password','$password')";
-        $datas_saved = $db->query($query);
+        $query = "INSERT INTO users (user_name, email, hashed_password, password) " .
+            // "VALUES ('$username', '$email', '$hashed_password','$password')";
+            "VALUES (?,?,?,?)";
+        $stmt = $db->prepare($query);
+        $stmt->bind_param("ssss", $username, $email, $hashed_password, $password);
+        $stmt->execute();
+        // $datas_saved = $db->query($query);
         if ($datas_saved !== TRUE) {
             die("FUCK");
         }
