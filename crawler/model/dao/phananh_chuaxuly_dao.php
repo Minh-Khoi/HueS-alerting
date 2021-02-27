@@ -23,11 +23,12 @@ class phananh_chuaxuly_dao
    * check if the the particular-id "phananh" was loaded and saved to database before 
    * If it 's existing in database, meaning that the "phananh_chuaxuly" is old (this function return false)
    * Else, return true
-   * @param $id is index of the web-page showing the corresponding "phananh"
+   * @param phananh_chuaxuly $phananh
    */
   private function checkif_phananh_is_new(int $id)
   {
-    $SQL_SELECT = "Select * from phananh_chua_xuly where id = ?";
+    // $id = $phananh->id;
+    $SQL_SELECT = "Select * from phananh_chua_xuly where id = " . $id;
     $result = $this->conn->query($SQL_SELECT);
     return ($result->num_rows == 0);
   }
