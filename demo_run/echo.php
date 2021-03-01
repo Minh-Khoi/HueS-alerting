@@ -3,9 +3,10 @@ error_reporting(E_ERROR | E_PARSE);
 
 
 $count = 0;
+$minhkhoi = $argv[1];
 setInterval(function () use ($count) {
   $GLOBALS['count']++;
-  echo "hello, minhkhoi 5 GIÂY LẦN THỨ {$GLOBALS['count']} \n";
+  echo "hello, " . $GLOBALS['minhkhoi'] . " 5 GIÂY LẦN THỨ {$GLOBALS['count']} \n";
 }, 5000);
 
 function setInterval($f, $milliseconds)

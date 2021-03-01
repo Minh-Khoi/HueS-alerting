@@ -39,8 +39,12 @@ class phananh_chuaxuly_dao
    */
   public function create(phananh_chuaxuly $phananh)
   {
-    $SQL_INSERT = "Insert into phananh_chua_xuly values (?,?,?,?,?,?,?)";
+    $SQL_INSERT = "Insert into 'phananh_chua_xuly' values (?,?,?,?,?,?)";
     $stmt = $this->conn->prepare($SQL_INSERT);
+    // if (!$stmt) {
+    //   echo mysqli_report(MYSQLI_REPORT_ALL);
+    //   die();
+    // }
     $stmt->bind_param(
       "issssi",
       $phananh->id,
