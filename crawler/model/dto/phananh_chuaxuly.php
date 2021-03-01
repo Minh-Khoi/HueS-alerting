@@ -49,7 +49,10 @@ class phananh_chuaxuly
     $this->url = $url_object->url . "?pa=" . $this->id;
   }
 
-  /** Check if this "phananh" object is "daxuly" or not */
+  /**
+   *  Check if this "phananh" object is "daxuly" or not .
+   * This function also return true if the "phananh" object was removed.
+   */
   private function da_xu_ly($html)
   {
     $els_chitiet_trangthai = $html->find(".ChiTiet_XuLy_Vien .ChiTiet_TrangThai");
