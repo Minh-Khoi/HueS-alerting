@@ -37,7 +37,9 @@ class action
   public function having_right_keyword(string $noidung, array $keywords)
   {
     foreach ($keywords as $k => $words) {
-      if (strpos($noidung, $words) != -1) {
+      echo $words . "\t" . $noidung . "\n";
+      var_dump((strpos($noidung, $words)));
+      if (strpos($noidung, $words)) {
         return true;
       }
     }
@@ -50,10 +52,11 @@ class action
   public function check_for_storing_keywords(array $keywords_array)
   {
     $keywords_in_json_file = file_get_contents('./keywords_list.json');
+    $keywords_in_json_file_to_upper = strtoupper($keywords_in_json_file);
     $arrayof_keywords_in_json_file = json_decode($keywords_in_json_file);
     foreach ($keywords_array as $k => $words) {
-      if (!in_array($words, $arrayof_keywords_in_json_file)) {
-        array_push($arrayof_keywords_in_json_file, $words);
+      if (!in_array(strtoupper($words), $arrayof_keywords_in_json_file)) {
+        array_push($arrayof_keywords_in_json_file, strtoupper($words));
         file_put_contents("./keywords_list.json", json_encode($arrayof_keywords_in_json_file));
       }
     }
@@ -62,7 +65,7 @@ class action
   /** return the array of all keywords save in keywords_list.json */
   public function get_all_keywords()
   {
-    $keywords_in_json_file = file_get_contents('./keywords_list.json');
+    $keywords_in_json_file = file_get_contents(__DIR__ . "/keywords_list.json");
     $array_of_keywords = json_decode($keywords_in_json_file, true);
     return $array_of_keywords;
   }

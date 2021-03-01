@@ -39,12 +39,13 @@ class phananh_chuaxuly_dao
    */
   public function create(phananh_chuaxuly $phananh)
   {
-    $SQL_INSERT = "Insert into 'phananh_chua_xuly' values (?,?,?,?,?,?)";
+    $daxem = ($phananh->is_new) ? 0 : 1;
+    $SQL_INSERT = "Insert into phananh_chua_xuly values (?,?,?,?,?,?)";
     $stmt = $this->conn->prepare($SQL_INSERT);
-    // if (!$stmt) {
-    //   echo mysqli_report(MYSQLI_REPORT_ALL);
-    //   die();
-    // }
+    if (!$stmt) {
+      echo $this->conn->error;
+      die();
+    }
     $stmt->bind_param(
       "issssi",
       $phananh->id,
@@ -52,7 +53,7 @@ class phananh_chuaxuly_dao
       $phananh->ngay_update,
       $phananh->donvi_xuly,
       $phananh->thoi_han,
-      ($phananh->is_new) ? 0 : 1
+      $daxem
     );
     $stmt->execute();
   }

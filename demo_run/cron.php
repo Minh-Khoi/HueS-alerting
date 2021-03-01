@@ -5,7 +5,7 @@ require_once dirname(__FILE__, 2) . "/crawler/model/dto/phananh_chuaxuly.php";
 
 
 setInterval(function () {
-  save_new_keywords();
+  // save_new_keywords();
   cron_function();
 }, 1000 * 60 * 60 * 24);
 
@@ -38,15 +38,16 @@ function cron_function()
         $phananh_dao = new phananh_chuaxuly_dao();
         $phananh_dao->create($phananh);
       }
-      echo "phản ánh số " . $phananh->id . ($having_right_keywords ? " đã " : " không ") . "được lưu vào CSDL";
+      echo "phản ánh số " . $phananh->id . ($having_right_keywords ? " đã " : " không ") . "được lưu vào CSDL\n";
+      die();
     }
     $last_index--;
   } while (strtotime($phananh->ngay_update) < $time_of_15_day_ago);
 }
 
 
-function save_new_keywords()
-{
-  $action = new action();
-  $keywords_array = $GLOBALS['argv'];
-}
+// function save_new_keywords()
+// {
+//   $action = new action();
+//   $keywords_array = $GLOBALS['argv'];
+// }

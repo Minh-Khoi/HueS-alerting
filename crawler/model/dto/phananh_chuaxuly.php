@@ -32,12 +32,16 @@ class phananh_chuaxuly
       $this->daxuly = true;
       return;
     }
+    // echo $this->id . "\n";
+    // var_dump($html->find(".ChiTiet_Vien .ChiTiet_NgayGui")[1] or null);
+    // die();
     // Write the code below to set value for variables $noi_dung, $ngay_update, $donvi_xuly, $thoi_han,
     // $ket_qua, $is_new ..... (The work checking if phananh is solved or not must be done 
     // before a "phananh_chuaxualy" is constructed!)
     $this->noi_dung = $html->find(".ChiTiet_Vien .ChiTiet_NoiDung")[0]->innertext;
     $this->ngay_update = $html->find(".ChiTiet_Vien .ChiTiet_NgayGui")[0]->innertext;
-    $this->thoi_han = $html->find(".ChiTiet_Vien .ChiTiet_NgayGui")[1]->innertext;
+    $this->thoi_han = isset($html->find(".ChiTiet_Vien .ChiTiet_NgayGui")[1])
+      ? ($html->find(".ChiTiet_Vien .ChiTiet_NgayGui")[1]->innertext) : "+15 days";
     $this->donvi_xuly = $html->find(".ChiTiet_Vien .ChiTiet_XuLy_Vien .ChiTiet_DonVi")[0]->innertext;
     $this->is_new = $this->dao->checkif_phananh_is_new($this->id);
   }
@@ -51,7 +55,7 @@ class phananh_chuaxuly
 
   /**
    *  Check if this "phananh" object is "daxuly" or not .
-   * This function also return true if the "phananh" object was removed.
+   * This function also return true if the "phananh" object was removed from website.
    */
   private function da_xu_ly($html)
   {
