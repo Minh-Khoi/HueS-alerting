@@ -37,8 +37,8 @@ class action
   public function having_right_keyword(string $noidung, array $keywords)
   {
     foreach ($keywords as $k => $words) {
-      echo $words . "\t" . $noidung . "\n";
-      var_dump((strpos($noidung, $words)));
+      // echo $words . "\t" . $noidung . "\n";
+      // var_dump((strpos($noidung, $words)));
       if (strpos($noidung, $words)) {
         return true;
       }

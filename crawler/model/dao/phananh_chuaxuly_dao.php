@@ -58,7 +58,7 @@ class phananh_chuaxuly_dao
     $stmt->execute();
   }
 
-  /** Read all the "phananh" object saved in database */
+  /** Read all the "phananh" objects saved in database */
   public function read_all()
   {
     $SQL_SELECT = "Select * from phananh_chua_xuly ";
@@ -66,6 +66,18 @@ class phananh_chuaxuly_dao
     $array = [];
     while ($row = $result->fetch_assoc()) {
       array_push($array, $row);
+    }
+    return $array;
+  }
+
+  /** Read all the id (only) of "phananh" objects saved in database  */
+  public function read_all_index()
+  {
+    $SQL_SELECT = "Select id from phananh_chua_xuly ";
+    $result = $this->conn->query($SQL_SELECT);
+    $array = [];
+    while ($id_row = $result->fetch_assoc()) {
+      array_push($array, $id_row);
     }
     return $array;
   }

@@ -23,6 +23,7 @@ function setInterval($f, $milliseconds)
 function cron_function()
 {
   $action = new action();
+  $dao = new phananh_chuaxuly_dao();
   $array_of_keywords = $action->get_all_keywords();
   $phananh = null;
   $last_index = $action->find_max_index();
@@ -34,9 +35,9 @@ function cron_function()
     $phananh = new phananh_chuaxuly($last_index);
     if (!$phananh->daxuly) {
       $having_right_keywords = $action->having_right_keyword($phananh->noi_dung, $array_of_keywords);
-      if ($having_right_keywords) {
-        $phananh_dao = new phananh_chuaxuly_dao();
-        $phananh_dao->create($phananh);
+      $phananh_is_new = $dao->checkif_phananh_is_new($phananh->id);
+      if ($having_right_keywords && $phananh_is_new) {
+        $dao->create($phananh);
       }
       echo "phản ánh số " . $phananh->id . ($having_right_keywords ? " đã " : " không ") . "được lưu vào CSDL\n";
       die();
