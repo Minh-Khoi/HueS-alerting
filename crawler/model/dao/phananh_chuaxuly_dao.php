@@ -24,7 +24,7 @@ class phananh_chuaxuly_dao
    * check if the the particular-id "phananh" was loaded and saved to database before 
    * If it 's existing in database, meaning that the "phananh_chuaxuly" is old (this function return false)
    * Else, return true
-   * @param phananh_chuaxuly $phananh
+   * @param int $id of the phananh object
    */
   public function checkif_phananh_is_new(int $id)
   {
