@@ -40,7 +40,7 @@ function cron_function()
         $dao->create($phananh);
       }
       echo "phản ánh số " . $phananh->id . ($having_right_keywords ? " đã " : " không ") . "được lưu vào CSDL\n";
-      die();
+      // die();
     }
     $last_index--;
   } while (strtotime($phananh->ngay_update) < $time_of_15_day_ago);

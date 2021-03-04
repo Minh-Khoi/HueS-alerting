@@ -58,6 +58,17 @@ function file_get_html(
 	$defaultBRText = DEFAULT_BR_TEXT,
 	$defaultSpanText = DEFAULT_SPAN_TEXT)
 {
+	$context = stream_context_create(
+		array(
+			'http' => array(
+				'follow_location' => false
+			),
+			'ssl' => array(
+				"verify_peer"=>false,
+				"verify_peer_name"=>false,
+			),
+		)
+	);
 	if($maxLen <= 0) { $maxLen = MAX_FILE_SIZE; }
 
 	$dom = new simple_html_dom(
