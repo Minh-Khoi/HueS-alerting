@@ -8,18 +8,27 @@
 
 class user
 {
-  private $id, $user_name;
-  public $email, $hash_password, $passsword, $keywords;
+  public $id, $user_name;
+  public $email, $hash_password, $passsword, $keywords, $reset_password_key;
+
   /**
    * Class constructor.
    */
-  public function __construct($id, $user_name, $email, $hash_password, $passsword, $keywords)
-  {
+  public function __construct(
+    $id,
+    $user_name,
+    $email,
+    $hash_password,
+    $passsword,
+    $keywords,
+    $reset_password_key
+  ) {
     $this->id = $id;
     $this->user_name = $user_name;
     $this->email = $email;
     $this->hash_password = $hash_password;
     $this->passsword = $passsword;
     $this->keywords = $keywords;
+    $this->reset_password_key = $reset_password_key;
   }
 }

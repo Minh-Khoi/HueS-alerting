@@ -32,6 +32,7 @@ class user_dao
   /** 
    * Get the keyword of the specified user by its id
    * @param int $id of user
+   * @param mixed $keywords. if keyword is null, the app will load keyword from database
    */
   public function get_keywords_of_user_by_id(int $id, $keywords = null)
   {
@@ -45,5 +46,49 @@ class user_dao
       $returned_result = json_decode($row, true);
       return $returned_result;
     }
+  }
+
+  /** 
+   * Set new keywords for user 
+   * @param int $id id of user
+   * @param string $keywords $keywords which is set for user
+   */
+  public function set_keywords_for_user(int $id, string $keywords)
+  {
+    $SQL = "Update users set keywords = ? where id = ?";
+    $stmt = $this->db->prepare($SQL);
+    $stmt->bind_param("si", $keywords, $id);
+    $stmt->execute();
+  }
+
+  /** 
+   * Set the reset_password key for specified user: Save it to database, and return it as string
+   * @param user $user which is asking for reset password.
+   */
+  public function set_reset_password_key_for_user(user $user)
+  {
+    $hash_pass_enscript = md5($user->hash_password);
+    $pass_enscript = md5($user->passsword);
+    $key_enscript = md5($user->keywords);
+    $reset_key = $hash_pass_enscript . $pass_enscript . $key_enscript;
+    // Save the reset_key to database
+    $SQL = "Update users set reset_password_key = ? where id = ?";
+    $stmt = $this->db->prepare($SQL);
+    $stmt->bind_param("si", $reset_key, $user->id);
+    $stmt->execute();
+    // THEN return
+    return $reset_key;
+  }
+
+  /** 
+   * Delete reset_key for user
+   * @param user $user which is needed to delete reset_key.
+   */
+  public function delete_reset_password_key_for_user(user $user)
+  {
+    $SQL = "Update users set reset_password_key = ? where id = ?";
+    $stmt = $this->db->prepare($SQL);
+    $stmt->bind_param("si", "", $user->id);
+    $stmt->execute();
   }
 }
