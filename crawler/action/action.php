@@ -37,11 +37,15 @@ class action
   public function having_right_keyword(string $noidung, array $keywords)
   {
     foreach ($keywords as $k => $words) {
-      // echo $words . "\t" . $noidung . "\n";
-      // var_dump((strpos($noidung, $words)));
-      if (strpos($noidung, $words)) {
-        return true;
+      $array_of_keywords = explode("+", $words);
+      $all_keywords_existing = true;
+      foreach ($array_of_keywords as $k2 => $words2) {
+        if (strpos($noidung, $words2) === false) {
+          $all_keywords_existing = false;
+          break;
+        }
       }
+      return $all_keywords_existing;
     }
     return false;
   }
