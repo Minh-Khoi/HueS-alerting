@@ -13,10 +13,10 @@
       </ion-header>
 
       <!-- <ExploreContainer name="Tab Upload Keywords" /> -->
-      <h6>
-        Enter the keywords you want to search here
+      <div class="ion-text-center">
+        Enter the keywords you want to search below
         <br />If you want to search multiples keywords, please seperate them with "+" character
-      </h6>
+      </div>
       <ion-input placeholder="add keywords here"></ion-input>
     </ion-content>
   </ion-page>
@@ -49,5 +49,14 @@ export default {
 <style scoped>
 ion-title {
   font-size: 1.5em;
+}
+
+ion-input {
+  border: 0.5px solid blue;
+}
+
+.ion-text-center {
+  color: green;
+  margin-bottom: 1em;
 }
 </style>
