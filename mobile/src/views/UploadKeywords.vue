@@ -12,7 +12,12 @@
         </ion-toolbar>
       </ion-header>
 
-      <ExploreContainer name="Tab Upload Keywords" />
+      <!-- <ExploreContainer name="Tab Upload Keywords" /> -->
+      <h6>
+        Enter the keywords you want to search here
+        <br />If you want to search multiples keywords, please seperate them with "+" character
+      </h6>
+      <ion-input placeholder="add keywords here"></ion-input>
     </ion-content>
   </ion-page>
 </template>
@@ -23,18 +28,20 @@ import {
   IonHeader,
   IonToolbar,
   IonTitle,
-  IonContent
+  IonContent,
+  IonInput
 } from "@ionic/vue";
-import ExploreContainer from "../components/ExploreContainer.vue";
+// import ExploreContainer from "../components/ExploreContainer.vue";
 
 export default {
   components: {
-    ExploreContainer,
+    // ExploreContainer,
     IonHeader,
     IonToolbar,
     IonTitle,
     IonContent,
-    IonPage
+    IonPage,
+    IonInput
   }
 };
 </script>

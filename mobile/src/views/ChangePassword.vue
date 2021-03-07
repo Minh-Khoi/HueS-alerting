@@ -12,7 +12,7 @@
         </ion-toolbar>
       </ion-header>
 
-      <ExploreContainer name="Tab Change Password" />
+      <!-- <ExploreContainer name="Tab Change Password" /> -->
     </ion-content>
   </ion-page>
 </template>
@@ -25,11 +25,11 @@ import {
   IonTitle,
   IonContent
 } from "@ionic/vue";
-import ExploreContainer from "@/components/ExploreContainer.vue";
+// import ExploreContainer from "../components/ExploreContainer.vue";
 
 export default {
   components: {
-    ExploreContainer,
+    // ExploreContainer,
     IonHeader,
     IonToolbar,
     IonTitle,

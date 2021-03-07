@@ -45,7 +45,6 @@ class action
           break;
         }
       }
-
       return $all_keywords_existing;
     }
     return false;
