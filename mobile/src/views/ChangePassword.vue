@@ -13,28 +13,71 @@
       </ion-header>
 
       <!-- <ExploreContainer name="Tab Change Password" /> -->
+      <ion-item>
+        <ion-label>Old Password</ion-label>
+        <ion-input placeholder="Old password" v-model="oldPassword" type="password"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>New Password</ion-label>
+        <ion-input placeholder="new password" v-model="newPassword" type="password"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>retype New Password</ion-label>
+        <ion-input placeholder="new password again" v-model="newPasswordRetyped" type="password"></ion-input>
+      </ion-item>
+
+      <ion-button @click="submitKeywords()">SUBMIT</ion-button>
+      <ion-alert
+        :message="alertMes"
+        :is-open="showAnnounce"
+        :css-class="(alertMes=='failed') ? 'message_failed' : 'message_successfully'"
+      ></ion-alert>
     </ion-content>
   </ion-page>
 </template>
 
-<script lang="ts">
+<script >
 import {
   IonPage,
+  IonLabel,
+  IonItem,
   IonHeader,
   IonToolbar,
   IonTitle,
-  IonContent
+  IonContent,
+  IonAlert
 } from "@ionic/vue";
 // import ExploreContainer from "../components/ExploreContainer.vue";
 
 export default {
+  data() {
+    return {
+      oldPassword: "",
+      newPassword: "",
+      newPasswordRetyped: "",
+
+      alertMes: "",
+      showAnnounce: false
+    };
+  },
   components: {
     // ExploreContainer,
     IonHeader,
+    IonLabel,
+    IonItem,
     IonToolbar,
     IonTitle,
     IonContent,
-    IonPage
+    IonPage,
+    IonAlert
+  },
+  methods: {
+    submitKeywords() {
+      let formDatas = new FormData();
+      formDatas.append("old_password", this.oldPassword);
+      formDatas.append("new_password", this.newPassword);
+      formDatas.append("new_password_retyped", this.newPasswordRetyped);
+    }
   }
 };
 </script>
