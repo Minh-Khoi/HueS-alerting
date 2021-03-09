@@ -2,6 +2,7 @@
 require_once dirname(__FILE__, 2) . "/libs/simple_html_dom.php";
 require_once dirname(__FILE__, 2) . "/model/dao/phananh_chuaxuly_dao.php";
 require_once dirname(__FILE__, 2) . "/model/dto/phananh_chuaxuly.php";
+require_once dirname(__FILE__, 3) . "/authentication/model/user_dao.php";
 
 class action
 {
@@ -72,5 +73,38 @@ class action
     $keywords_in_json_file = file_get_contents(__DIR__ . "/keywords_list.json");
     $array_of_keywords = json_decode($keywords_in_json_file, true);
     return $array_of_keywords;
+  }
+
+  /** 
+   * add new keyword for login user. When this function is invoked, the server will replace the string in 
+   * "keywords" field in database with the new string send from mobile app
+   * @param string $new_keywords all keywords that the user want to search, 
+   * including the keyword had beeb saved before
+   */
+  public function add_new_keywords(string $new_keywords)
+  {
+    $user_dao = new user_dao();
+    $username = $_SESSION['username'];
+    $user_dao->set_keywords_for_user($username, $new_keywords);
+  }
+
+  /** 
+   * validation the old password. If right change the password as required
+   * @param string $old_pass @param string $new_pass @param string $new_retyped
+   * @return bool 
+   */
+  public function pre_change_password(string $old_pass, string $new_pass, string $new_retyped)
+  {
+    $username = $_SESSION['username'];
+    $user_dao = new user_dao();
+    $user = $user_dao->get_user_by_username($username);
+    $valid_old_pass = md5($old_pass) === $user->hash_password;
+    if (!$valid_old_pass) {
+      die('your current password is not correct!!!');
+    } else if ($new_pass != $new_retyped) {
+      die('your new password is not unique!!');
+    } else {
+      $reset_key = $user_dao->set_reset_password_key_for_user($user);
+    }
   }
 }

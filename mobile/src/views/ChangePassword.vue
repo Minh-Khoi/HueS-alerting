@@ -47,6 +47,7 @@ import {
   IonContent,
   IonAlert
 } from "@ionic/vue";
+import { backendAPI } from "../router/backendAPI";
 // import ExploreContainer from "../components/ExploreContainer.vue";
 
 export default {
@@ -77,6 +78,16 @@ export default {
       formDatas.append("old_password", this.oldPassword);
       formDatas.append("new_password", this.newPassword);
       formDatas.append("new_password_retyped", this.newPasswordRetyped);
+      formDatas.append("task", "change_password");
+
+      fetch(backendAPI, {
+        body: formDatas,
+        method: "POST"
+      }).then(response => {
+        this.alertMes =
+          response.status == 200 ? "change password successfully" : "failed";
+        this.showAnnounce = true;
+      });
     }
   }
 };

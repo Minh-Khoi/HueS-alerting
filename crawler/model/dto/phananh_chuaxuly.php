@@ -32,9 +32,6 @@ class phananh_chuaxuly
       $this->daxuly = true;
       return;
     }
-    // echo $this->id . "\n";
-    // var_dump($html->find(".ChiTiet_Vien .ChiTiet_NgayGui")[1] or null);
-    // die();
     // Write the code below to set value for variables $noi_dung, $ngay_update, $donvi_xuly, $thoi_han,
     // $ket_qua, $is_new ..... (The work checking if phananh is solved or not must be done 
     // before a "phananh_chuaxualy" is constructed!)

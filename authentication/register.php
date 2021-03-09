@@ -1,5 +1,7 @@
 <?php
 session_start();
+require_once dirname(__FILE__) . "/model/user_dao.php";
+
 // Connect to the database
 $db = new mysqli('localhost', 'root', '', 'php-auth');
 
@@ -15,9 +17,13 @@ if (isset($_POST['register'])) {
     $password = $db->real_escape_string($_POST['password']);
     $confirm_password = $db->real_escape_string($_POST['confirm_password']);
 
+    $user_dao = new user_dao();
+
     // Validation
     if (empty($username)) {
         array_push($errors, "Username is required!");
+    } else if ($user_dao->username_existing($username)) {
+        array_push($errors, "This username has been registered before");
     }
 
     if (empty($email)) {

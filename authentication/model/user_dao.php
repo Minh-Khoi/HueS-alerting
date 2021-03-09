@@ -28,6 +28,36 @@ class user_dao
     return $user->keywords;
   }
 
+  /** 
+   * get the instance of user class from database by according to username
+   * @param string $username
+   * @return user 
+   */
+  public function get_user_by_username(string $username)
+  {
+    $SQL = "Select * from users where user_name = " . $username;
+    $result_set = $this->db->query($SQL);
+    $result_array_of_users = [];
+    while ($row = $result_set->fetch_assoc()) {
+      $user = new user($row);
+      array_push($result_array_of_users, $user);
+    }
+    return $result_array_of_users[0];
+  }
+
+  /**
+   *  Check if a new user_name has been registered before 
+   * @param string $username the username of the new registering user
+   */
+  public function username_existing(string $username)
+  {
+    $SQL = "Select * from users where user_name = " . $username;
+    $result_set = $this->db->query($SQL);
+    if ($result_set->num_rows() > 0) {
+      return true;
+    }
+    return false;
+  }
 
   /** 
    * Get the keyword of the specified user by its id
@@ -50,14 +80,14 @@ class user_dao
 
   /** 
    * Set new keywords for user 
-   * @param int $id id of user
+   * @param string $username name of user
    * @param string $keywords $keywords which is set for user
    */
-  public function set_keywords_for_user(int $id, string $keywords)
+  public function set_keywords_for_user(string $username, string $keywords)
   {
-    $SQL = "Update users set keywords = ? where id = ?";
+    $SQL = "Update users set keywords = ? where user_name = ?";
     $stmt = $this->db->prepare($SQL);
-    $stmt->bind_param("si", $keywords, $id);
+    $stmt->bind_param("ss", $keywords, $username);
     $stmt->execute();
   }
 
