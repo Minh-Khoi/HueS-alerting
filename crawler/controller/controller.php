@@ -10,5 +10,5 @@ if ($_POST['task'] == 'add_keywords') {
   $new_password = $_POST['new_password'];
   $new_password_retyped = $_POST['new_password_retyped'];
   $action = new action();
-  $action->pre_change_password($old_password, $new_password, $new_password_retyped);
+  $action->change_password($old_password, $new_password, $new_password_retyped);
 }

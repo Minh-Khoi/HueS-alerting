@@ -1,6 +1,9 @@
 import { createRouter, createWebHistory } from "@ionic/vue-router";
 import { RouteRecordRaw } from "vue-router";
 import Tabs from "../views/Tabs.vue";
+import UploadKeywords from "../views/UploadKeywords.vue";
+import ChangePassword from "../views/ChangePassword.vue";
+import Login from "../views/Login.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -17,17 +20,20 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: "UploadKeywords",
-        component: () => import("@/views/UploadKeywords.vue")
+        name: "upload_keywords",
+        component: () => UploadKeywords
       },
       {
         path: "ChangePassword",
-        component: () => import("@/views/ChangePassword.vue")
-      },
-      {
-        path: "tab3",
-        component: () => import("@/views/Tab3.vue")
+        name: "change_password",
+        component: () => ChangePassword
       }
     ]
+  },
+  {
+    path: "/login/",
+    name: "login",
+    component: () => Login
   }
 ];
 

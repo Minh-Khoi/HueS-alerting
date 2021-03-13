@@ -91,20 +91,20 @@ class action
   /** 
    * validation the old password. If right change the password as required
    * @param string $old_pass @param string $new_pass @param string $new_retyped
-   * @return bool 
    */
-  public function pre_change_password(string $old_pass, string $new_pass, string $new_retyped)
+  public function change_password(string $old_pass, string $new_pass, string $new_retyped)
   {
     $username = $_SESSION['username'];
     $user_dao = new user_dao();
     $user = $user_dao->get_user_by_username($username);
     $valid_old_pass = md5($old_pass) === $user->hash_password;
     if (!$valid_old_pass) {
-      die('your current password is not correct!!!');
+      echo ('your current password is not correct!!!');
     } else if ($new_pass != $new_retyped) {
-      die('your new password is not unique!!');
+      echo ('your new password is not unique!!');
     } else {
-      $reset_key = $user_dao->set_reset_password_key_for_user($user);
+      $user_dao->set_password_for_user($user, $new_pass);
+      echo "update password successfully";
     }
   }
 }

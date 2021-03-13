@@ -91,34 +91,31 @@ class user_dao
     $stmt->execute();
   }
 
-  /** 
-   * Set the reset_password key for specified user: Save it to database, and return it as string
-   * @param user $user which is asking for reset password.
-   */
-  public function set_reset_password_key_for_user(user $user)
+  /** Set new password for user */
+  public function set_password_for_user(user $user, string $new_password)
   {
-    $hash_pass_enscript = md5($user->hash_password);
-    $pass_enscript = md5($user->passsword);
-    $key_enscript = md5($user->keywords);
-    $reset_key = $hash_pass_enscript . $pass_enscript . $key_enscript;
-    // Save the reset_key to database
-    $SQL = "Update users set reset_password_key = ? where id = ?";
+    $hashed_new_pass = md5($new_password);
+    $SQL = "Update users set password = ?, hashed_password =? where user_name = ?";
     $stmt = $this->db->prepare($SQL);
-    $stmt->bind_param("si", $reset_key, $user->id);
+    $stmt->bind_param("sss", $new_password, $hashed_new_pass, $username);
     $stmt->execute();
-    // THEN return
-    return $reset_key;
   }
 
-  /** 
-   * Delete reset_key for user
-   * @param user $user which is needed to delete reset_key.
-   */
-  public function delete_reset_password_key_for_user(user $user)
+  
+  public function set_remember_login_token(string $token, string $username)
   {
-    $SQL = "Update users set reset_password_key = ? where id = ?";
+    $SQL = "Update users set login_remembering_token = ? where user_name = ?";
     $stmt = $this->db->prepare($SQL);
-    $stmt->bind_param("si", "", $user->id);
+    $stmt->bind_param("ss", $token, $username);
     $stmt->execute();
+  }
+
+  public function get_remember_login_token(string $username)
+  {
+    $SQL = "Select keywords from users where user_name = " . $username;
+    $result = $this->db->query($SQL);
+    $returned_result = [];
+    $row = $result->fetch_assoc();
+    $returned_result = json_decode($row, true);
   }
 }
