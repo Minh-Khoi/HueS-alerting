@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "@ionic/vue-router";
 import { RouteRecordRaw } from "vue-router";
+
 import Tabs from "../views/Tabs.vue";
 import UploadKeywords from "../views/UploadKeywords.vue";
 import ChangePassword from "../views/ChangePassword.vue";
@@ -8,7 +9,7 @@ import Login from "../views/Login.vue";
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
-    redirect: "/tabs/UploadKeywords"
+    redirect: "/login"
   },
   {
     path: "/tabs/",
@@ -16,7 +17,7 @@ const routes: Array<RouteRecordRaw> = [
     children: [
       {
         path: "",
-        redirect: "/tabs/UploadKeywords"
+        redirect: { name: "login" }
       },
       {
         path: "UploadKeywords",
@@ -39,6 +40,8 @@ const routes: Array<RouteRecordRaw> = [
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
+  // mode: "history",
+  // base: process.env.BASE_URL,
   routes
 });
 

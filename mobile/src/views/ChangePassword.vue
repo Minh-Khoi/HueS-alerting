@@ -74,7 +74,7 @@ export default {
   },
   methods: {
     submitKeywords() {
-      let formDatas = new FormData();
+      const formDatas = new FormData();
       formDatas.append("old_password", this.oldPassword);
       formDatas.append("new_password", this.newPassword);
       formDatas.append("new_password_retyped", this.newPasswordRetyped);

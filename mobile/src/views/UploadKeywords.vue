@@ -64,21 +64,20 @@ export default {
   },
   methods: {
     async submitKeywords() {
-      const formDatas = new FormData();
-      formDatas.append("keywords", this.keywords);
-      formDatas.append("task", "add_keywords");
-      this.alertMes = "fuck";
-      this.showAnnounce = true;
-      console.log(this.showAnnounce);
-
-      fetch(backendAPI, {
-        body: formDatas,
-        method: "POST"
-      }).then(response => {
-        this.alertMes =
-          response.status == 200 ? "add keywords successfull" : "failed";
-        this.showAnnounce = true;
-      });
+      // const formDatas = new FormData();
+      // formDatas.append("keywords", this.keywords);
+      // formDatas.append("task", "add_keywords");
+      // this.alertMes = "fuck";
+      // this.showAnnounce = true;
+      // console.log(this.showAnnounce);
+      // fetch(backendAPI, {
+      //   body: formDatas,
+      //   method: "POST"
+      // }).then(response => {
+      //   this.alertMes =
+      //     response.status == 200 ? "add keywords successfull" : "failed";
+      //   this.showAnnounce = true;
+      // });
     }
   }
 };

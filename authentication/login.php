@@ -9,18 +9,21 @@ if (!$db) {
     die('Connection failed: ' . mysqli_connect_error());
 }
 
-// $errors = array();
-// // check if cookie remember the previous log in user
-// if (isset($_COOKIE["remembered_logged_member"])) {
-//     $user_datas_in_array = json_decode($_COOKIE['remembered_logged_member'], true);
-//     // die("<pre>" . print_r($user_datas_in_array, true) . "</pre>");
-//     $username = $user_datas_in_array["user_name"];
-//     setcookie('remembered_logged_member', json_encode($user_datas_in_array), time() + 60 * 60 * 24);
-//     $_COOKIE['remembered_logged_member'] = json_encode($user_datas_in_array);
-//     $_SESSION['username'] = $username;
-//     $_SESSION['success'] = "You are logged in!";
-//     header("location: http://{$_SERVER['HTTP_HOST']}/authentication/home.php");
-// }
+// First, check the database if the device has been "remembered" to be logged in
+if (isset($_POST["token_remembered"])) {
+    $token_remembered = $db->real_escape_string($_POST['token_remembered']);
+    $query = "SELECT * FROM users WHERE login_remembering_token = '$token_remembered'";
+    $data_response_object = [];
+    $result_set = $db->query($query);
+    $row_of_user = $result_set->fetch_assoc();
+    if ($result_set->num_rows > 0) {
+        $_SESSION['username'] = $username;
+        $_SESSION['success'] = "You are logged in!";
+        $data_response_object['announce'] = "You are logged in!";
+        echo json_encode($data_response_object);
+        die();
+    }
+}
 
 // Check if this file was call by login form
 if (isset($_POST['login-submit'])) {
@@ -34,21 +37,25 @@ if (isset($_POST['login-submit'])) {
         // Log user in
         $user_datas_in_array = $result->fetch_assoc();
         // die("<pre>" . print_r($result->fetch_assoc(), true) . "</pre>");
+        $data_response_object = [];
         if ($_POST['remember'] == 1) {
-            // at first, create token
-            $client_device = new client_device();
-            $client_ip = $client_device->client_ip;
-            $token_before_enscrypted = $client_ip . $user_datas_in_array['id'];
-            $token = md5($token_before_enscrypted);
-            // then save it in database
             $user_dao = new user_dao();
+            // at first, create token
+            $time_remember =  time();
+            $token = md5($time_remember . $hashed_password . $username);
+            // then save it in database
             $user_dao->set_remember_login_token($token, $username);
+            $data_response_object['token'] = $token;
         }
         $_SESSION['username'] = $username;
         $_SESSION['success'] = "You are logged in!";
-        header("location: http://{$_SERVER['HTTP_HOST']}/authentication/home.php");
+        $data_response_object['announce'] = "You are logged in!";
+        echo json_encode($data_response_object);
+        die();
+        // header("location: http://{$_SERVER['HTTP_HOST']}/authentication/home.php");
     } else {
-        // die($username . " " . $password);
-        header("location: http://{$_SERVER['HTTP_HOST']}/authentication/index.php");
+        $data_response_object['announce'] = "login failed";
+        die(json_encode($data_response_object));
+        // header("location: http://{$_SERVER['HTTP_HOST']}/authentication/index.php");
     }
 }
