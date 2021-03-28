@@ -25,7 +25,7 @@ if (isset($_POST["token_remembered"])) {
     }
 }
 
-// Check if this file was call by login form
+// THEN Check if this file was call by login form
 if (isset($_POST['login-submit'])) {
     $username = $db->real_escape_string($_POST['username']);
     $password = $db->real_escape_string($_POST['password']);

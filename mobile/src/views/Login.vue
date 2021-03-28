@@ -19,13 +19,10 @@
 
 <script>
 import { IonItem, IonInput, IonPage, IonLabel, IonCheckbox } from "@ionic/vue";
-import { useRoute } from "vue-router";
+// import { useRoute } from "vue-router";
 import { backendAPIlogin } from "../router/backendAPI.ts";
 import router from "../router/index.ts";
 import { Storage } from "@ionic/storage";
-
-const storageDealer = new Storage();
-await storageDealer.create();
 
 export default {
   data() {
@@ -37,11 +34,13 @@ export default {
   methods: {
     /** This function will load the "remembering token" from local storage of devices */
     async getTokenInStorage() {
+      const storageDealer = new Storage();
+      await storageDealer.create();
       let rememberingToken = null;
       await storageDealer.get("rememberingToken").then(token => {
         rememberingToken = token;
       });
-      return rememberingToken.length > 0 ? rememberingToken : false;
+      return rememberingToken ? rememberingToken : false;
     }
   },
   components: {
@@ -57,7 +56,7 @@ export default {
    */
   async mounted() {
     const rememberingToken = await this.getTokenInStorage();
-    if (rememberingToken) {
+    if (rememberingToken != false) {
       const formData = new FormData();
       formData.append("token_remembered", rememberingToken);
       await fetch(backendAPIlogin, {
@@ -66,17 +65,26 @@ export default {
       })
         .then(response => response.text())
         .then(result => {
-          let resultObject = JSON.parse(result);
+          const resultObject = JSON.parse(result);
           if (resultObject.announce == "You are logged in!") {
             console.log("guck");
-            // router.push({ name: "upload_keywords" });
+            router.push({ name: "upload_keywords" });
           }
         });
     }
-    // There is to way to navigate with ionic vue router
+    // There is 2 way to navigate with ionic vue router
     // router.push({ name: "upload_keywords" });
     // window.location.href =
     //   "http://" + window.location.host + "/tabs/UploadKeywords";
+
+    // These code lines are only for testing ...
+    // const storageDealer = new Storage();
+    // await storageDealer.create();
+    // //   storageDealer.set("fuck", "fuck u");
+    // await storageDealer.get("fuck").then(strin => {
+    //   console.log(strin);
+    // });
+    // // Testing end
   }
 };
 </script>
