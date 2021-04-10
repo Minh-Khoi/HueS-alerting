@@ -2,7 +2,6 @@
 session_start();
 header('Access-Control-Allow-Origin: http://localhost:2000');
 error_reporting(E_ERROR);
-require_once dirname(__FILE__) . "/client_IP.php";
 require_once dirname(__FILE__) . "/model/user_dao.php";
 
 $db = new mysqli('localhost', 'root', '', 'php-auth');

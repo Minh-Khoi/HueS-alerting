@@ -18,7 +18,8 @@ if (isset($_POST['register'])) {
     $confirm_password = $db->real_escape_string($_POST['confirm_password']);
 
     $user_dao = new user_dao();
-
+    // var_dump($user_dao->username_existing($username));
+    // die();
     // Validation
     if (empty($username)) {
         array_push($errors, "Username is required!");
@@ -47,13 +48,22 @@ if (isset($_POST['register'])) {
             "VALUES (?,?,?,?)";
         $stmt = $db->prepare($query);
         $stmt->bind_param("ssss", $username, $email, $hashed_password, $password);
-        $stmt->execute();
+        $datas_saved = $stmt->execute();
         // $datas_saved = $db->query($query);
-        if ($datas_saved !== TRUE) {
+        if ($datas_saved !== true) {
             die("FUCK");
         }
         $_SESSION['username'] = $username;
         $_SESSION['success'] = "You are logged in";
         header("location: http://{$_SERVER['HTTP_HOST']}/authentication/home.php");
+    } else {
+        echo '<b style="margin:5px;background-color: #b3ffd9; padding: 5px">
+                direct to previous page to re-submit the register form </b>';
+        foreach ($errors as $k => $er) {
+            echo '<div style="padding: 15px;background-color: #ff8080;color: black;
+                                border-radius : 5em; font-weight:800; margin:10px"> '
+                . $er .
+                '</div>';
+        }
     }
 }

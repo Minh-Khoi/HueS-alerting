@@ -41,6 +41,9 @@ import {
   alertController
 } from "@ionic/vue";
 import { backendAPI } from "../router/backendAPI.ts";
+import { Storage } from "@ionic/storage";
+import router from "../router/index.ts";
+import { backendAPIlogin } from "../router/backendAPI.ts";
 // import ExploreContainer from "../components/ExploreContainer.vue";
 
 export default {
@@ -78,6 +81,17 @@ export default {
       //     response.status == 200 ? "add keywords successfull" : "failed";
       //   this.showAnnounce = true;
       // });
+    }
+  },
+  async mounted() {
+    const storageDealer = new Storage();
+    await storageDealer.create();
+    let loginToken = null;
+    await storageDealer.get("token_login").then(token => {
+      loginToken = token;
+    });
+    if (loginToken === null) {
+      router.push({ name: "login" });
     }
   }
 };

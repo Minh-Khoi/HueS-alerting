@@ -35,7 +35,7 @@ class user_dao
    */
   public function get_user_by_username(string $username)
   {
-    $SQL = "Select * from users where user_name = " . $username;
+    $SQL = "Select * from users where user_name = '$username'";
     $result_set = $this->db->query($SQL);
     $result_array_of_users = [];
     while ($row = $result_set->fetch_assoc()) {
@@ -51,9 +51,11 @@ class user_dao
    */
   public function username_existing(string $username)
   {
-    $SQL = "Select * from users where user_name = " . $username;
+    $SQL = "Select * from users where user_name = '$username'";
     $result_set = $this->db->query($SQL);
-    if ($result_set->num_rows() > 0) {
+    // var_dump($SQL);
+    // die();
+    if ($result_set->num_rows > 0) {
       return true;
     }
     return false;
@@ -69,7 +71,7 @@ class user_dao
     if (isset($keywords)) {
       return json_decode($keywords, true);
     } else {
-      $SQL = "Select keywords from users where id = " . $id;
+      $SQL = "Select keywords from users where id = '" . $id . "'";
       $result = $this->db->query($SQL);
       $returned_result = [];
       $row = $result->fetch_assoc();
@@ -112,7 +114,7 @@ class user_dao
 
   public function get_remember_login_token(string $username)
   {
-    $SQL = "Select keywords from users where user_name = " . $username;
+    $SQL = "Select keywords from users where user_name = '$username'";
     $result = $this->db->query($SQL);
     $returned_result = [];
     $row = $result->fetch_assoc();
