@@ -101,7 +101,7 @@ class user_dao
     $stmt->execute();
   }
 
-  
+  /** Save the logging-in  token in to database  */
   public function set_remember_login_token(string $token, string $username)
   {
     $SQL = "Update users set login_remembering_token = ? where user_name = ?";

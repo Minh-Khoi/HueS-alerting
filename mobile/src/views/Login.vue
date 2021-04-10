@@ -2,33 +2,49 @@
   <ion-page class>
     <ion-item>
       <ion-label>User name</ion-label>
-      <ion-input placeholder="User name" v-model="oldPassword" type="password" name="username"></ion-input>
+      <ion-input placeholder="User name" v-model="username" name="username"></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label>Password</ion-label>
-      <ion-input placeholder="Password" v-model="oldPassword" type="password" name="password"></ion-input>
+      <ion-input placeholder="Password" v-model="password" type="password" name="password"></ion-input>
     </ion-item>
 
     <ion-item class="remember_field">
       <ion-label>Remember password ???</ion-label>
-      <ion-checkbox color="primary" name="remember"></ion-checkbox>
+      <ion-checkbox color="primary" name="remember" v-model="loginRemembered"></ion-checkbox>
     </ion-item>
+    <ion-button @click="onSubmit()">LOG IN</ion-button>
   </ion-page>
 </template>
 
 <script>
-import { IonItem, IonInput, IonPage, IonLabel, IonCheckbox } from "@ionic/vue";
-// import { useRoute } from "vue-router";
+import {
+  IonItem,
+  IonInput,
+  IonPage,
+  IonLabel,
+  IonCheckbox,
+  IonButton
+} from "@ionic/vue";
 import { backendAPIlogin } from "../router/backendAPI.ts";
 import router from "../router/index.ts";
 import { Storage } from "@ionic/storage";
 
 export default {
+  components: {
+    IonItem,
+    IonInput,
+    IonPage,
+    IonLabel,
+    IonCheckbox,
+    IonButton
+  },
   data() {
     return {
-      // loginRemembered: false
-      // oldPassword: ""
+      loginRemembered: null,
+      username: "",
+      password: ""
     };
   },
   methods: {
@@ -37,18 +53,41 @@ export default {
       const storageDealer = new Storage();
       await storageDealer.create();
       let rememberingToken = null;
-      await storageDealer.get("rememberingToken").then(token => {
+      await storageDealer.get("token_login").then(token => {
         rememberingToken = token;
       });
       return rememberingToken ? rememberingToken : false;
+    },
+
+    /** THis function will submit the detail of login form */
+    async onSubmit() {
+      const formDatas = new FormData();
+      formDatas.append("login_submit", true);
+      formDatas.append("remember", this.loginRemembered);
+      formDatas.append("username", this.username);
+      formDatas.append("password", this.password);
+      // console.log(this.loginRemembered);
+
+      await fetch(backendAPIlogin, {
+        body: formDatas,
+        method: "POST"
+      })
+        .then(response => response.text())
+        .then(async function(resultJSON) {
+          const result = JSON.parse(resultJSON);
+          // console.log(typeof resultJSON);
+          // First save the "token_login" to remember the current login
+          if (result.token) {
+            const storageDealer = new Storage();
+            await storageDealer.create();
+            await storageDealer.set("token_login", result.token);
+          }
+          // then push to the page "upload_keywords"
+          if (result.announce != "login failed") {
+            router.push({ name: "upload_keywords" });
+          }
+        });
     }
-  },
-  components: {
-    IonItem,
-    IonInput,
-    IonPage,
-    IonLabel,
-    IonCheckbox
   },
   /**
    * When the component mounted, it will fetch to the "backendAPIlogin" first to check
@@ -56,6 +95,7 @@ export default {
    */
   async mounted() {
     const rememberingToken = await this.getTokenInStorage();
+    console.log(rememberingToken);
     if (rememberingToken != false) {
       const formData = new FormData();
       formData.append("token_remembered", rememberingToken);
@@ -66,12 +106,13 @@ export default {
         .then(response => response.text())
         .then(result => {
           const resultObject = JSON.parse(result);
-          if (resultObject.announce == "You are logged in!") {
-            console.log("guck");
+          if (resultObject.announce == "found remembered logging in user") {
+            // console.log("guck");
             router.push({ name: "upload_keywords" });
           }
         });
     }
+
     // There is 2 way to navigate with ionic vue router
     // router.push({ name: "upload_keywords" });
     // window.location.href =

@@ -1,5 +1,7 @@
 <?php
 session_start();
+header('Access-Control-Allow-Origin: http://localhost:2000');
+error_reporting(E_ERROR);
 require_once dirname(__FILE__) . "/client_IP.php";
 require_once dirname(__FILE__) . "/model/user_dao.php";
 
@@ -19,14 +21,14 @@ if (isset($_POST["token_remembered"])) {
     if ($result_set->num_rows > 0) {
         $_SESSION['username'] = $username;
         $_SESSION['success'] = "You are logged in!";
-        $data_response_object['announce'] = "You are logged in!";
+        $data_response_object['announce'] = "found remembered logging in user";
         echo json_encode($data_response_object);
         die();
     }
 }
 
 // THEN Check if this file was call by login form
-if (isset($_POST['login-submit'])) {
+if (isset($_POST['login_submit'])) {
     $username = $db->real_escape_string($_POST['username']);
     $password = $db->real_escape_string($_POST['password']);
     $hashed_password = md5($password);
@@ -38,7 +40,7 @@ if (isset($_POST['login-submit'])) {
         $user_datas_in_array = $result->fetch_assoc();
         // die("<pre>" . print_r($result->fetch_assoc(), true) . "</pre>");
         $data_response_object = [];
-        if ($_POST['remember'] == 1) {
+        if (!is_null($_POST['remember'])) {
             $user_dao = new user_dao();
             // at first, create token
             $time_remember =  time();
