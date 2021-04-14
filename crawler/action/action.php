@@ -37,18 +37,17 @@ class action
    */
   public function having_right_keyword(string $noidung, array $keywords)
   {
+    $noidung_upper = mb_strtoupper($noidung, "UTF-8");
+    $keywords_existing = false;
     foreach ($keywords as $k => $words) {
-      $array_of_keywords = explode("+", $words);
-      $all_keywords_existing = true;
-      foreach ($array_of_keywords as $k2 => $words2) {
-        if (strpos($noidung, $words2) === false) {
-          $all_keywords_existing = false;
-          break;
-        }
+      echo "\n";
+      // var_dump($noidung_upper);
+      var_dump(stripos($noidung_upper, $words));
+      if (stripos($noidung_upper, $words) !== false) {
+        $keywords_existing = true;
       }
-      return $all_keywords_existing;
     }
-    return false;
+    return $keywords_existing;
   }
 
   /** 
@@ -56,13 +55,16 @@ class action
    */
   public function check_for_storing_keywords(array $keywords_array)
   {
-    $keywords_in_json_file = file_get_contents('./keywords_list.json');
+    $keywords_in_json_file = file_get_contents(dirname(__FILE__) . "./keywords_list.json");
     $keywords_in_json_file_to_upper = strtoupper($keywords_in_json_file);
-    $arrayof_keywords_in_json_file = json_decode($keywords_in_json_file);
+    $arrayof_keywords_in_json_file = (array) json_decode($keywords_in_json_file);
     foreach ($keywords_array as $k => $words) {
       if (!in_array(strtoupper($words), $arrayof_keywords_in_json_file)) {
         array_push($arrayof_keywords_in_json_file, strtoupper($words));
-        file_put_contents("./keywords_list.json", json_encode($arrayof_keywords_in_json_file));
+        file_put_contents(
+          dirname(__FILE__) . "./keywords_list.json",
+          json_encode($arrayof_keywords_in_json_file)
+        );
       }
     }
   }
@@ -71,21 +73,32 @@ class action
   public function get_all_keywords()
   {
     $keywords_in_json_file = file_get_contents(__DIR__ . "/keywords_list.json");
-    $array_of_keywords = json_decode($keywords_in_json_file, true);
+    $array_of_keywords = (array) json_decode($keywords_in_json_file);
+    // var_dump($array_of_keywords);
+    // die();
     return $array_of_keywords;
   }
 
   /** 
    * add new keyword for login user. When this function is invoked, the server will replace the string in 
    * "keywords" field in database with the new string send from mobile app
-   * @param string $new_keywords all keywords that the user want to search, 
-   * including the keyword had beeb saved before
+   * @param string $new_keywords all keywords that the user want to search,
+   * these keywords must include the keyword had been saved before
+   * @param string $token_remembered the submitted form must include the login-remember token 
+   * to invoke this method
    */
-  public function add_new_keywords(string $new_keywords)
+  public function add_new_keywords(string $new_keywords, string $token_remembered)
   {
     $user_dao = new user_dao();
-    $username = $_SESSION['username'];
+    $user = $user_dao->find_user_by_token($token_remembered);
+    if (is_null($user)) {
+      echo "Post Form with invalid TOKEN";
+      die();
+    }
+    $username = $user->user_name;
     $user_dao->set_keywords_for_user($username, $new_keywords);
+    $arrayof_new_keywords = explode('+', $new_keywords);
+    $this->check_for_storing_keywords($arrayof_new_keywords);
   }
 
   /** 
@@ -101,7 +114,7 @@ class action
     if (!$valid_old_pass) {
       echo ('your current password is not correct!!!');
     } else if ($new_pass != $new_retyped) {
-      echo ('your new password is not unique!!');
+      echo ('your new password is not re-typed successfully !!');
     } else {
       $user_dao->set_password_for_user($user, $new_pass);
       echo "update password successfully";

@@ -8,7 +8,7 @@
 class user
 {
   public $id, $user_name;
-  public $email, $hash_password, $passsword, $keywords, $login_remembering_token;
+  public $email, $hashed_password, $password, $keywords, $login_remembering_token;
 
   /**
    * Class constructor.
@@ -19,8 +19,8 @@ class user
     $this->id = $row['id'];
     $this->user_name = $row['user_name'];
     $this->email = $row['email'];
-    $this->hash_password = $row['hash_password'];
-    $this->passsword = $row['passsword'];
+    $this->hashed_password = $row['hashed_password'];
+    $this->password = $row['password'];
     $this->keywords = $row['keywords'];
     $this->login_remembering_token = $row['login_remembering_token'];
   }

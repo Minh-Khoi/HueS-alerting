@@ -36,6 +36,9 @@ function cron_function()
     if (!$phananh->daxuly) {
       $having_right_keywords = $action->having_right_keyword($phananh->noi_dung, $array_of_keywords);
       $phananh_is_new = $dao->checkif_phananh_is_new($phananh->id);
+      // var_dump($phananh_is_new);
+      // echo  $phananh->id . "\n";
+      // var_dump($having_right_keywords);
       if ($having_right_keywords && $phananh_is_new) {
         $dao->create($phananh);
       }

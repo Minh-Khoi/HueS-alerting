@@ -67,20 +67,27 @@ export default {
   },
   methods: {
     async submitKeywords() {
-      // const formDatas = new FormData();
-      // formDatas.append("keywords", this.keywords);
-      // formDatas.append("task", "add_keywords");
+      const ionicStorage = new Storage();
+      await ionicStorage.create();
+      let token = null;
+      await ionicStorage.get("token_login").then(tokenInStorage => {
+        token = tokenInStorage;
+      });
+      const formDatas = new FormData();
+      formDatas.append("keywords_string", this.keywords);
+      formDatas.append("task", "add_keywords");
+      formDatas.append("token_remembered", token);
       // this.alertMes = "fuck";
       // this.showAnnounce = true;
-      // console.log(this.showAnnounce);
-      // fetch(backendAPI, {
-      //   body: formDatas,
-      //   method: "POST"
-      // }).then(response => {
-      //   this.alertMes =
-      //     response.status == 200 ? "add keywords successfull" : "failed";
-      //   this.showAnnounce = true;
-      // });
+      console.log(this.keywords);
+      fetch(backendAPI, {
+        body: formDatas,
+        method: "POST"
+      })
+        .then(response => response.text())
+        .then(result => {
+          console.log(result);
+        });
     }
   },
   async mounted() {

@@ -120,4 +120,22 @@ class user_dao
     $row = $result->fetch_assoc();
     $returned_result = json_decode($row, true);
   }
+
+  /**
+   *  Check if the remembered token is valid is owned by user,
+   * @param string $token
+   * @return user $user the user whose the $token or NULL
+   */
+  public function find_user_by_token(string $token)
+  {
+    $query = "SELECT * FROM users WHERE login_remembering_token = '$token'";
+    $data_response_object = [];
+    $result_set = $this->db->query($query);
+    $row_of_user = $result_set->fetch_assoc();
+    if ($result_set->num_rows == 0) {
+      return null;
+    }
+    $user = new user($row_of_user);
+    return $user;
+  }
 }
