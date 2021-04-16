@@ -32,6 +32,7 @@ function cron_function()
   $time_of_15_day_ago = strtotime("-15 days");
 
   do {
+    echo "running cron ... \n";
     $phananh = new phananh_chuaxuly($last_index);
     if (!$phananh->daxuly) {
       $having_right_keywords = $action->having_right_keyword($phananh->noi_dung, $array_of_keywords);

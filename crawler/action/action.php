@@ -40,10 +40,11 @@ class action
     $noidung_upper = mb_strtoupper($noidung, "UTF-8");
     $keywords_existing = false;
     foreach ($keywords as $k => $words) {
-      echo "\n";
+      // echo "$words \t";
       // var_dump($noidung_upper);
-      var_dump(stripos($noidung_upper, $words));
-      if (stripos($noidung_upper, $words) !== false) {
+      // var_dump(stripos($noidung_upper, trim($words)));
+      // // echo "\n";
+      if (stripos($noidung_upper, trim($words)) !== false) {
         $keywords_existing = true;
       }
     }
@@ -72,7 +73,7 @@ class action
   /** return the array of all keywords save in keywords_list.json */
   public function get_all_keywords()
   {
-    $keywords_in_json_file = file_get_contents(__DIR__ . "/keywords_list.json");
+    $keywords_in_json_file = file_get_contents(dirname(__FILE__) . "/keywords_list.json");
     $array_of_keywords = (array) json_decode($keywords_in_json_file);
     // var_dump($array_of_keywords);
     // die();
