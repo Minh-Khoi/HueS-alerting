@@ -100,7 +100,9 @@ class action
       die();
     }
     $username = $user->user_name;
-    $user_dao->set_keywords_for_user($username, $new_keywords);
+    if ($user_dao->set_keywords_for_user($username, $new_keywords)) {
+      echo "Your keywords eywords have been successfully saved in to database";
+    };
     $arrayof_new_keywords = explode('+', $new_keywords);
     $this->check_for_storing_keywords($arrayof_new_keywords);
   }

@@ -90,7 +90,7 @@ class user_dao
     $SQL = "Update users set keywords = ? where user_name = ?";
     $stmt = $this->db->prepare($SQL);
     $stmt->bind_param("ss", $keywords, $username);
-    $stmt->execute();
+    return $stmt->execute();
   }
 
   /** Set new password for user */
@@ -99,7 +99,7 @@ class user_dao
     $hashed_new_pass = md5($new_password);
     $SQL = "Update users set password = ?, hashed_password =? where user_name = ?";
     $stmt = $this->db->prepare($SQL);
-    $stmt->bind_param("sss", $new_password, $hashed_new_pass, $username);
+    $stmt->bind_param("sss", $new_password, $hashed_new_pass, $user->user_name);
     $stmt->execute();
   }
 

@@ -19,12 +19,12 @@
       </div>
       <ion-input placeholder="add keywords here" v-model="keywords"></ion-input>
       <ion-button @click="submitKeywords()">SUBMIT</ion-button>
-      <ion-alert
+      <!-- <ion-alert
         :message="alertMes"
         :is-open="showAnnounce"
         @onDidDismiss="resetShowAnnounce()"
         :css-class="(alertMes=='failed') ? 'message_failed' : 'message_successfully'"
-      ></ion-alert>
+      ></ion-alert>-->
     </ion-content>
   </ion-page>
 </template>
@@ -86,12 +86,15 @@ export default {
         method: "POST"
       })
         .then(response => response.text())
-        .then(result => {
-          console.log(result);
+        .then(async function(result) {
+          // console.log(result);
+          const alert = await alertController.create({
+            cssClass:
+              result == "failed" ? "message_failed" : "message_successfully",
+            message: result
+          });
+          await alert.present();
         });
-    },
-    resetShowAnnounce() {
-      this.showAnnounce = false;
     }
   },
   async mounted() {
