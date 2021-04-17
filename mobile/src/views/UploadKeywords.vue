@@ -22,6 +22,7 @@
       <ion-alert
         :message="alertMes"
         :is-open="showAnnounce"
+        @onDidDismiss="resetShowAnnounce()"
         :css-class="(alertMes=='failed') ? 'message_failed' : 'message_successfully'"
       ></ion-alert>
     </ion-content>
@@ -88,6 +89,9 @@ export default {
         .then(result => {
           console.log(result);
         });
+    },
+    resetShowAnnounce() {
+      this.showAnnounce = false;
     }
   },
   async mounted() {

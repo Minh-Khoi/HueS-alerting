@@ -26,12 +26,13 @@
         <ion-input placeholder="new password again" v-model="newPasswordRetyped" type="password"></ion-input>
       </ion-item>
 
-      <ion-button @click="submitKeywords()">SUBMIT</ion-button>
-      <ion-alert
+      <ion-button @click="submit()">SUBMIT</ion-button>
+      <!-- <ion-alert
         :message="alertMes"
         :is-open="showAnnounce"
+        @onDidDismiss="showAnnounce=false"
         :css-class="(alertMes=='failed') ? 'message_failed' : 'message_successfully'"
-      ></ion-alert>
+      ></ion-alert>-->
     </ion-content>
   </ion-page>
 </template>
@@ -45,9 +46,13 @@ import {
   IonToolbar,
   IonTitle,
   IonContent,
-  IonAlert
+  IonAlert,
+  IonInput,
+  IonButton,
+  alertController
 } from "@ionic/vue";
 import { backendAPI } from "../router/backendAPI";
+import { Storage } from "@ionic/storage";
 // import ExploreContainer from "../components/ExploreContainer.vue";
 
 export default {
@@ -57,8 +62,8 @@ export default {
       newPassword: "",
       newPasswordRetyped: "",
 
-      alertMes: "",
-      showAnnounce: false
+      alertMes: ""
+      // showAnnounce: false
     };
   },
   components: {
@@ -70,11 +75,21 @@ export default {
     IonTitle,
     IonContent,
     IonPage,
-    IonAlert
+    IonAlert,
+    IonInput,
+    IonButton
   },
   methods: {
-    submitKeywords() {
+    async submit() {
+      const ionicStorage = new Storage();
+      await ionicStorage.create();
+      let token = null;
+      await ionicStorage.get("token_login").then(tokenInStorage => {
+        token = tokenInStorage;
+      });
+      console.log(this.oldPassword);
       const formDatas = new FormData();
+      formDatas.append("token_remembered", token);
       formDatas.append("old_password", this.oldPassword);
       formDatas.append("new_password", this.newPassword);
       formDatas.append("new_password_retyped", this.newPasswordRetyped);
@@ -83,12 +98,22 @@ export default {
       fetch(backendAPI, {
         body: formDatas,
         method: "POST"
-      }).then(response => {
-        this.alertMes =
-          response.status == 200 ? "change password successfully" : "failed";
-        this.showAnnounce = true;
-      });
+      })
+        .then(response => response.text())
+        .then(async function(result) {
+          // this.alertMes = result;
+          const alert = await alertController.create({
+            cssClass:
+              result == "failed" ? "message_failed" : "message_successfully",
+            message: result
+          });
+          await alert.present();
+        });
     }
+  },
+  resetShowAnnounce() {
+    console.log("fuck you");
+    this.showAnnounce = false;
   }
 };
 </script>

@@ -109,16 +109,26 @@ class action
    * validation the old password. If right change the password as required
    * @param string $old_pass @param string $new_pass @param string $new_retyped
    */
-  public function change_password(string $old_pass, string $new_pass, string $new_retyped)
-  {
-    $username = $_SESSION['username'];
+  public function change_password(
+    string $old_pass,
+    string $new_pass,
+    string $new_retyped,
+    string $token_remembered
+  ) {
     $user_dao = new user_dao();
-    $user = $user_dao->get_user_by_username($username);
-    $valid_old_pass = md5($old_pass) === $user->hash_password;
+    $user = $user_dao->find_user_by_token($token_remembered);
+    if (is_null($user)) {
+      echo "Post Form with invalid TOKEN";
+      die();
+    }
+    // var_dump($user->hashed_password);
+    // var_dump(($old_pass));
+
+    $valid_old_pass = md5($old_pass) === $user->hashed_password;
     if (!$valid_old_pass) {
       echo ('your current password is not correct!!!');
     } else if ($new_pass != $new_retyped) {
-      echo ('your new password is not re-typed successfully !!');
+      echo ('your new password is not re-typed correctly !!');
     } else {
       $user_dao->set_password_for_user($user, $new_pass);
       echo "update password successfully";
