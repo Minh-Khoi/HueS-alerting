@@ -59,14 +59,17 @@ class action
     $keywords_in_json_file = file_get_contents(dirname(__FILE__) . "./keywords_list.json");
     $keywords_in_json_file_to_upper = strtoupper($keywords_in_json_file);
     $arrayof_keywords_in_json_file = (array) json_decode($keywords_in_json_file);
+    // var_dump($keywords_in_json_file);
+    // die();
     foreach ($keywords_array as $k => $words) {
-      if (!in_array(strtoupper($words), $arrayof_keywords_in_json_file)) {
-        array_push($arrayof_keywords_in_json_file, strtoupper($words));
-        file_put_contents(
-          dirname(__FILE__) . "./keywords_list.json",
-          json_encode($arrayof_keywords_in_json_file)
-        );
-      }
+      // var_dump($words);
+      if (!in_array(mb_strtoupper($words), $arrayof_keywords_in_json_file)) {
+        array_push($arrayof_keywords_in_json_file, mb_strtoupper($words));
+        // var_dump(json_encode($arrayof_keywords_in_json_file));
+      };
+      $json = json_encode($arrayof_keywords_in_json_file);
+      // var_dump($json);
+      file_put_contents(dirname(__FILE__) . "/keywords_list.json", $json);
     }
   }
 
