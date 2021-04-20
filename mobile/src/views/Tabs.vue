@@ -11,6 +11,10 @@
           <ion-icon :icon="ellipse" />
           <ion-label>password</ion-label>
         </ion-tab-button>
+        <ion-tab-button tab="tab3" href="/tabs/NotificationSetting">
+          <ion-icon :icon="ellipse" />
+          <ion-label>Notification</ion-label>
+        </ion-tab-button>
       </ion-tab-bar>
     </ion-tabs>
   </ion-page>

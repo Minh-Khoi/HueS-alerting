@@ -5,6 +5,7 @@ import Tabs from "../views/Tabs.vue";
 import UploadKeywords from "../views/UploadKeywords.vue";
 import ChangePassword from "../views/ChangePassword.vue";
 import Login from "../views/Login.vue";
+import NotificationSetting from "../views/NotificationSetting.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -28,6 +29,11 @@ const routes: Array<RouteRecordRaw> = [
         path: "ChangePassword",
         name: "change_password",
         component: () => ChangePassword
+      },
+      {
+        path: "NotificationSetting",
+        name: "notification_setting",
+        component: () => NotificationSetting
       }
     ]
   },
