@@ -136,4 +136,40 @@ class action
       echo "update password successfully";
     }
   }
+
+  /** 
+   * get fetched datas from database
+   */
+  public function fetch_datas(string $token_remembered)
+  {
+    $user_dao = new user_dao();
+    $current_user = $user_dao->find_user_by_token($token_remembered);
+    if ($current_user) {
+      $keywords_array = explode("+", $current_user->keywords);
+      $array_of_valid_phananh = $this->find_phananh_by_keywords($keywords_array);
+      return $array_of_valid_phananh;
+    }
+    die();
+  }
+
+  /** 
+   * Read all the "phananh" object saved in database 
+   * which have the noidung consisting at least one in $keywords_array
+   * @param array $keywords_array
+   */
+  public function find_phananh_by_keywords(array $keywords_array)
+  {
+    $phananh_dao = new phananh_chuaxuly_dao();
+    $all_phananh_array = $phananh_dao->read_all();
+    $results_array = [];
+    foreach ($all_phananh_array as $k => $phananh_in_array) {
+      foreach ($keywords_array as $k => $words) {
+        if ($this->having_right_keyword($phananh_in_array["noi_dung"], $words)) {
+          $new_phananh_instance = phananh_chuaxuly::new_instance($phananh_in_array);
+          array_push($results_array, $new_phananh_instance);
+        }
+      }
+    }
+    return $results_array;
+  }
 }

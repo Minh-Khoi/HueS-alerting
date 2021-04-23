@@ -46,7 +46,7 @@ import {
   IonToolbar,
   IonTitle,
   IonContent,
-  IonAlert,
+  // IonAlert,
   IonInput,
   IonButton,
   alertController
@@ -75,7 +75,7 @@ export default {
     IonTitle,
     IonContent,
     IonPage,
-    IonAlert,
+    // IonAlert,
     IonInput,
     IonButton
   },

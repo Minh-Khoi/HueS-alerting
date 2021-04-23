@@ -38,7 +38,7 @@ import {
   IonContent,
   IonInput,
   IonButton,
-  IonAlert,
+  // IonAlert,
   alertController
 } from "@ionic/vue";
 import { backendAPI } from "../router/backendAPI.ts";
@@ -63,8 +63,8 @@ export default {
     IonContent,
     IonPage,
     IonInput,
-    IonButton,
-    IonAlert
+    IonButton
+    // IonAlert
   },
   methods: {
     async submitKeywords() {

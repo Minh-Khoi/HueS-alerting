@@ -1,6 +1,6 @@
 import { Plugins, LocalNotificationsPlugin } from "@capacitor/core";
 
-class NotificationPusher {
+export class NotificationPusher {
   message: string;
   beginningTime: number;
   waiting: number;
@@ -16,14 +16,17 @@ class NotificationPusher {
     this.beginningTime = new Date(todayString + " " + beginningHour).getTime();
   }
 
-  async getScheduleRegularly() {
+  async getRegularSchedule() {
     await this.localNotification.schedule({
       notifications: [
         {
           id: 1,
           title: "There are some post that may interest you!!",
           body: this.message,
-          schedule: { every: "week" }
+          schedule: {
+            at: new Date(this.beginningTime + this.waiting),
+            repeats: false
+          }
         }
       ]
     });

@@ -121,5 +121,4 @@ class phananh_chuaxuly_dao
     $stmt->bind_param("i", $id);
     $stmt->execute();
   }
-
 }

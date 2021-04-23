@@ -6,19 +6,38 @@ require_once dirname(__FILE__, 2) . "/dao/phananh_chuaxuly_dao.php";
 
 class phananh_chuaxuly
 {
-  public $id, $link, $noi_dung, $ngay_update, $donvi_xuly, $thoi_han, $is_new, $daxuly;
-  private $url, $dao;
+  public $url, $id, $link, $noi_dung, $ngay_update, $donvi_xuly, $thoi_han, $is_new, $daxuly;
+  private  $dao;
 
   /**
    * Class model dto constructor.
    */
-  public function __construct(int $id)
+  public function __construct(int $id, bool $need_to_crawled = true)
   {
-    $this->dao = new phananh_chuaxuly_dao();
     $this->id = $id;
-    $this->link = "https://tuongtac.thuathienhue.gov.vn/?pa=" . $id;
-    $this->get_url();
-    $this->crawl_by_index();
+    if ($need_to_crawled) {
+      $this->dao = new phananh_chuaxuly_dao();
+      $this->link = "https://tuongtac.thuathienhue.gov.vn/?pa=" . $id;
+      $this->get_url();
+      $this->crawl_by_index();
+    }
+  }
+
+  /**
+   *  another way to construct an instance of phananh_chuaxuly
+   */
+  public static function new_instance(array $array)
+  {
+    $instance = new phananh_chuaxuly($array["id"], false);
+    $instance->link = $array["link"];
+    $instance->noi_dung = $array["noi_dung"];
+    $instance->ngay_update = $array["ngay_update"];
+    $instance->donvi_xuly = $array["donvi_xuly"];
+    $instance->thoi_han = $array["thoi_han"];
+    $instance->daxuly = $array["daxuly"];
+    $instance->is_new = !$array["da_xem"];
+    $instance->get_url();
+    return $instance;
   }
 
   /** 

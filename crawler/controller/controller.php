@@ -22,4 +22,8 @@ if ($task == 'add_keywords') {
   $new_password_retyped = $_POST['new_password_retyped'];
   $action = new action();
   $action->change_password($old_password, $new_password, $new_password_retyped, $token_remembered);
+} else if ($task == "fetching_datas") {
+  $action = new action();
+  $datas_array = $action->fetch_datas($token_remembered);
+  echo json_encode($datas_array);
 }
